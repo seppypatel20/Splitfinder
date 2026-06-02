@@ -1,0 +1,132 @@
+{
+  "theme": "Light",
+  "archetype": "Archetype 4: Swiss & High-Contrast",
+  "domain": "Real Estate / Financial Feasibility (Mobile App)",
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "IBM Plex Sans",
+    "scales": {
+      "h1": "text-3xl tracking-tight font-bold text-slate-900",
+      "h2": "text-2xl tracking-tight font-semibold text-slate-900",
+      "h3": "text-lg font-medium text-slate-900",
+      "body": "text-base font-normal text-slate-600",
+      "small_label": "text-xs uppercase tracking-widest text-slate-500 font-bold",
+      "hero_metric": "text-4xl tracking-tighter font-black"
+    }
+  },
+  "colors": {
+    "background": "#F9FAFB",
+    "surface": "#FFFFFF",
+    "primary": "#0A0A0A",
+    "primary_hover": "#27272A",
+    "accent_blue": "#2563EB",
+    "success_green": "#16A34A",
+    "success_bg": "#DCFCE7",
+    "error_red": "#DC2626",
+    "error_bg": "#FEE2E2",
+    "border": "#E5E7EB",
+    "text_main": "#0F172A",
+    "text_muted": "#64748B"
+  },
+  "layout_and_spacing": {
+    "philosophy": "Mobile-first, dense but clear interactions (Swiss Utility).",
+    "screen_wrapper": "h-screen w-full max-w-md mx-auto bg-gray-50 flex flex-col relative overflow-hidden shadow-2xl",
+    "bottom_nav": "absolute bottom-0 w-full bg-white border-t border-gray-200 flex justify-around items-center h-16 pb-safe z-50",
+    "spacing_scale": "Tailwind standard. Use p-4 or p-6 for screen edges. gap-4 for lists.",
+    "surfaces": {
+      "cards": "bg-white rounded-xl border border-gray-200 p-4",
+      "bottom_sheet": "bg-white rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.12)] border-t border-gray-200 p-6 pt-2 absolute bottom-16 w-full z-40 transition-transform duration-300",
+      "glass_header": "bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
+    }
+  },
+  "components": {
+    "map_search_tab": {
+      "description": "Interactive map filling the viewport above the nav. Floating filter chips at the top.",
+      "elements": [
+        "Horizontal scrolling filter chips (Suburb, <$700k, >600m²). Use glassmorphism container for the chips wrapper.",
+        "Map marker pins: Circular, pure black (#0A0A0A) background with white price text."
+      ]
+    },
+    "property_details_sheet": {
+      "description": "Draggable bottom sheet that appears when a map pin is tapped.",
+      "elements": [
+        "Drag handle: w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4.",
+        "Header: Address (H2), Price (H1).",
+        "Key Stats Row: Beds, Baths, Land Size (e.g., 620m²). Use icon + text layout.",
+        "Frontage Calculator Widget: A distinct, slightly inset container (bg-gray-100 p-4 rounded-xl). Includes a number input for 'Street Width'. Dynamically shows 'Pass' (Green) if width >= 20m (10m per lot), else 'Fail' (Red).",
+        "Primary CTA: 'Save Property' (w-full bg-primary text-white h-12 rounded-lg font-semibold)."
+      ]
+    },
+    "feasibility_tab": {
+      "description": "High-trust fintech calculator form.",
+      "elements": [
+        "Header: 'Feasibility Calculator' with 'Estimate based on parameters' subtitle.",
+        "Inputs: Purchase Price, Stamp Duty, Civil Works ($80,000 pre-filled), Sale Price per Lot.",
+        "Forms: Use Shadcn Input components. Labels must be bold and clear. Use numeric keypads for mobile.",
+        "Live Gross Profit Card: Sticky or prominently placed. bg-primary text-white p-6 rounded-2xl. Large typography for profit value (hero_metric scale)."
+      ]
+    },
+    "saved_properties_tab": {
+      "description": "List view of saved properties.",
+      "elements": [
+        "Vertical list of cards (gap-4).",
+        "Thumbnail image on the left (w-24 h-24 rounded-lg object-cover), details on the right.",
+        "Unsave action: Small icon button (Trash or X) in the top right of the card."
+      ]
+    }
+  },
+  "media": {
+    "dummy_properties": [
+      {
+        "id": "1",
+        "address": "12 Subdivision Way, Sydney",
+        "suburb": "Sydney",
+        "price": 650000,
+        "land_size": 620,
+        "frontage": 15,
+        "image_url": "https://images.pexels.com/photos/31664773/pexels-photo-31664773.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "2",
+        "address": "45 Developer Ave, Melbourne",
+        "suburb": "Melbourne",
+        "price": 700000,
+        "land_size": 700,
+        "frontage": 22,
+        "image_url": "https://images.unsplash.com/photo-1760129745103-91c4022ed5fb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHw0fHxhdXN0cmFsaWFuJTIwc3VidXJiYW4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MDQwMzU2NXww&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "3",
+        "address": "8 Split Street, Brisbane",
+        "suburb": "Brisbane",
+        "price": 590000,
+        "land_size": 605,
+        "frontage": 20,
+        "image_url": "https://images.unsplash.com/photo-1579678929710-862f8e01c0b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwxfHxhdXN0cmFsaWFuJTIwc3VidXJiYW4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MDQwMzU2NXww&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "4",
+        "address": "22 Profit Blvd, Perth",
+        "suburb": "Perth",
+        "price": 620000,
+        "land_size": 650,
+        "frontage": 18,
+        "image_url": "https://images.pexels.com/photos/5866151/pexels-photo-5866151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      }
+    ]
+  },
+  "testing": {
+    "attributes": "All interactive elements MUST include data-testid. Examples: data-testid='tab-map', data-testid='tab-saved', data-testid='tab-feasibility', data-testid='filter-chip-suburb', data-testid='property-pin-{id}', data-testid='frontage-input', data-testid='feasibility-purchase-price', data-testid='feasibility-civil-works', data-testid='gross-profit-value', data-testid='save-property-btn', data-testid='unsave-property-btn'."
+  },
+  "instructions_to_main_agent": [
+    "Build the application using standard React JS (.js or .jsx), Tailwind CSS, and optionally Framer Motion.",
+    "Do NOT use TypeScript (.tsx). The file extensions must be JavaScript.",
+    "Since this is an Expo mobile app target but the environment uses standard React DOM, simulate the mobile experience strictly using standard DOM elements with 'max-w-md mx-auto h-screen relative overflow-hidden' to mimic a mobile viewport.",
+    "Use standard web-friendly libraries for the Map Tab (like react-leaflet or a simple interactive SVG map if Leaflet is uninstalled) since react-native-maps won't work in a standard React DOM setup. Set map zoom controls to false for a clean mobile look.",
+    "Implement the Bottom Sheet for property details anchored to the bottom (above the 16px nav bar).",
+    "The Feasibility Calculator logic: Gross Profit = (Sale Price per Lot * 2) - Purchase Price - Stamp Duty - Civil Works.",
+    "The Frontage Calculator logic: It requires 10m per lot. Since subdivision implies 2 lots, total street width entered must be >= 20m to show a 'Pass' indicator.",
+    "Icons: Use lucide-react.",
+    "Fonts: Use standard Google Fonts links in HTML or standard Tailwind font-sans if specific imports are complex, but maintain the specified structural hierarchy."
+  ]
+}
