@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -48,6 +49,33 @@ export default function FeasibilityScreen() {
     setStampDuty(String(STAMP_DUTY_DEFAULT));
     setCivilWorks(String(CIVIL_WORKS_BASELINE));
     setSalePerLot(String(SALE_PER_LOT_DEFAULT));
+  };
+
+  const handleAutoStampDuty = () => {
+    const purchasePrice = purchaseN;
+    let duty: number;
+    if (region === "NSW") {
+      duty = 11210 + 0.045 * (purchasePrice - 365000);
+    } else if (region === "QLD") {
+      duty = 10150 + 0.045 * (purchasePrice - 540000);
+    } else if (region === "SA") {
+      duty = 21330 + 0.055 * (purchasePrice - 500000);
+    } else {
+      duty = purchasePrice * 0.05;
+    }
+    setStampDuty(String(Math.max(0, Math.round(duty))));
+  };
+
+  const handleExportPdf = () => {
+    const title = "Generating PDF";
+    const body =
+      "Your feasibility report is being generated and will be ready shortly.";
+    if (Platform.OS === "web") {
+      // RN-web does not implement Alert.alert — fall back to window.alert.
+      window.alert(`${title}\n\n${body}`);
+    } else {
+      Alert.alert(title, body);
+    }
   };
 
   return (
@@ -106,6 +134,42 @@ export default function FeasibilityScreen() {
           </View>
 
           <View style={styles.section}>
+            <Text style={styles.sectionTitle}>REGION</Text>
+            <View style={styles.regionRow}>
+              {["NSW", "VIC", "QLD", "WA", "SA"].map((s) => {
+                const active = region === s;
+                return (
+                  <TouchableOpacity
+                    key={s}
+                    style={[styles.regionPill, active && styles.regionPillActive]}
+                    onPress={() => setRegion(s)}
+                    testID={`region-${s}`}
+                  >
+                    <Text
+                      style={[
+                        styles.regionPillText,
+                        active && styles.regionPillTextActive,
+                      ]}
+                    >
+                      {s}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            <TouchableOpacity
+              style={styles.autoStampBtn}
+              onPress={handleAutoStampDuty}
+              testID="auto-stamp-duty-btn"
+            >
+              <Ionicons name="flash-outline" size={14} color="#0A0A0A" />
+              <Text style={styles.autoStampText}>
+                Auto-calc Stamp Duty for {region}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>COSTS</Text>
 
             <CurrencyInput
@@ -153,7 +217,7 @@ export default function FeasibilityScreen() {
           <View style={styles.exportRow}>
             <TouchableOpacity
               style={styles.exportBtn}
-              onPress={() => {}}
+              onPress={handleExportPdf}
               testID="export-pdf-btn"
             >
               <Ionicons name="document-text-outline" size={16} color="#0F172A" />

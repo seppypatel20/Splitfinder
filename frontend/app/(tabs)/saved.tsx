@@ -21,6 +21,7 @@ import PropertyDetailsModal from "@/src/components/PropertyDetailsModal";
 
 export default function SavedScreen() {
   const [savedProps, setSavedProps] = useState<Property[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [selected, setSelected] = useState<Property | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [draftAddress, setDraftAddress] = useState("");
@@ -35,6 +36,47 @@ export default function SavedScreen() {
   const [draftImage, setDraftImage] = useState("");
 
   const closeAdd = () => setAddOpen(false);
+
+  const resetDraft = () => {
+    setDraftAddress("");
+    setDraftSuburb("");
+    setDraftCity("");
+    setDraftState("");
+    setDraftPrice("");
+    setDraftLand("");
+    setDraftFrontage("");
+    setDraftBeds("");
+    setDraftBaths("");
+    setDraftImage("");
+  };
+
+  const handleSaveDraft = () => {
+    const toNum = (s: string) => {
+      const n = parseFloat(s.replace(/[^0-9.]/g, ""));
+      return Number.isFinite(n) ? n : 0;
+    };
+    const newProp: Property = {
+      id: `user-${Date.now()}`,
+      address: draftAddress.trim() || "Untitled property",
+      suburb: draftSuburb.trim() || "—",
+      city: draftCity.trim() || "—",
+      state: draftState || "—",
+      price: toNum(draftPrice),
+      landSize: toNum(draftLand),
+      frontage: toNum(draftFrontage),
+      bedrooms: toNum(draftBeds),
+      bathrooms: toNum(draftBaths),
+      latitude: 0,
+      longitude: 0,
+      imageUrl:
+        draftImage.trim() ||
+        "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      description: "User-added property.",
+    };
+    setProperties((prev) => [newProp, ...prev]);
+    resetDraft();
+    setAddOpen(false);
+  };
 
   const load = useCallback(async () => {
     const ids = await getSavedIds();
@@ -55,9 +97,15 @@ export default function SavedScreen() {
   }, [load]);
 
   const handleUnsave = async (id: string) => {
+    if (id.startsWith("user-")) {
+      setProperties((prev) => prev.filter((p) => p.id !== id));
+      return;
+    }
     await removeSaved(id);
     load();
   };
+
+  const combined = [...properties, ...savedProps];
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -65,7 +113,7 @@ export default function SavedScreen() {
         <View style={{ flex: 1 }}>
           <Text style={styles.brand}>Saved Properties</Text>
           <Text style={styles.subtitle}>
-            {savedProps.length} {savedProps.length === 1 ? "property" : "properties"} shortlisted
+            {combined.length} {combined.length === 1 ? "property" : "properties"} shortlisted
           </Text>
         </View>
         <TouchableOpacity
@@ -78,7 +126,7 @@ export default function SavedScreen() {
         </TouchableOpacity>
       </View>
 
-      {savedProps.length === 0 ? (
+      {combined.length === 0 ? (
         <View style={styles.empty} testID="saved-empty">
           <View style={styles.emptyIcon}>
             <Ionicons name="bookmark-outline" size={28} color="#94A3B8" />
@@ -90,7 +138,7 @@ export default function SavedScreen() {
         </View>
       ) : (
         <FlatList
-          data={savedProps}
+          data={combined}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
@@ -294,7 +342,7 @@ export default function SavedScreen() {
                 <Text style={addStyles.cancelText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={closeAdd}
+                onPress={handleSaveDraft}
                 style={addStyles.saveBtn}
                 testID="add-property-save"
               >
