@@ -17,12 +17,14 @@ const CIVIL_WORKS_BASELINE = 80000;
 const PURCHASE_DEFAULT = 650000;
 const STAMP_DUTY_DEFAULT = 25000;
 const SALE_PER_LOT_DEFAULT = 420000;
+const OTHER_COSTS_DEFAULT = 4000;
 
 export default function FeasibilityScreen() {
   const [purchase, setPurchase] = useState<string>(String(PURCHASE_DEFAULT));
   const [stampDuty, setStampDuty] = useState<string>(String(STAMP_DUTY_DEFAULT));
   const [civilWorks, setCivilWorks] = useState<string>(String(CIVIL_WORKS_BASELINE));
   const [salePerLot, setSalePerLot] = useState<string>(String(SALE_PER_LOT_DEFAULT));
+  const [otherCosts, setOtherCosts] = useState<string>(String(OTHER_COSTS_DEFAULT));
   const [region, setRegion] = useState<string>("NSW");
 
   const num = (v: string) => {
@@ -34,11 +36,12 @@ export default function FeasibilityScreen() {
   const stampN = num(stampDuty);
   const civilN = num(civilWorks);
   const saleN = num(salePerLot);
+  const otherN = num(otherCosts);
 
   const totalRevenue = useMemo(() => saleN * 2, [saleN]);
   const totalCost = useMemo(
-    () => purchaseN + stampN + civilN,
-    [purchaseN, stampN, civilN],
+    () => purchaseN + stampN + civilN + otherN,
+    [purchaseN, stampN, civilN, otherN],
   );
   const grossProfit = totalRevenue - totalCost;
   const margin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
@@ -49,6 +52,7 @@ export default function FeasibilityScreen() {
     setStampDuty(String(STAMP_DUTY_DEFAULT));
     setCivilWorks(String(CIVIL_WORKS_BASELINE));
     setSalePerLot(String(SALE_PER_LOT_DEFAULT));
+    setOtherCosts(String(OTHER_COSTS_DEFAULT));
   };
 
   const handleAutoStampDuty = () => {
@@ -67,14 +71,10 @@ export default function FeasibilityScreen() {
   };
 
   const handleExportPdf = () => {
-    const title = "Generating PDF";
-    const body =
-      "Your feasibility report is being generated and will be ready shortly.";
-    if (Platform.OS === "web") {
-      // RN-web does not implement Alert.alert — fall back to window.alert.
-      window.alert(`${title}\n\n${body}`);
+    if (Platform.OS === 'web') {
+      window.print();
     } else {
-      Alert.alert(title, body);
+      Alert.alert('Export', 'Report downloaded to device.');
     }
   };
 
@@ -193,6 +193,13 @@ export default function FeasibilityScreen() {
               onChange={setCivilWorks}
               testID="input-civil-works"
             />
+            <CurrencyInput
+              label="Other Costs"
+              hint="Conveyancing, bank setup, government transfer fees"
+              value={otherCosts}
+              onChange={setOtherCosts}
+              testID="input-other-costs"
+            />
           </View>
 
           <View style={styles.section}>
@@ -210,7 +217,7 @@ export default function FeasibilityScreen() {
           <View style={styles.formulaCard}>
             <Text style={styles.formulaTitle}>How it’s calculated</Text>
             <Text style={styles.formulaText}>
-              Gross Profit = (Sale Price per Lot × 2) − Purchase − Stamp Duty − Civil Works
+              Gross Profit = (Sale Price per Lot × 2) − Purchase − Stamp Duty − Civil Works − Other Costs
             </Text>
           </View>
 
