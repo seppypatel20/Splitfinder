@@ -1,9 +1,9 @@
 {
   "rootDirectory": "frontend",
   "buildCommand": "npx expo export -p web",
-  "outputDirectory": "dist",
-  "cleanUrls": true,
+  "outputDirectory": "web-build",
   "framework": null,
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/:path*", "destination": "/" }
   ]
