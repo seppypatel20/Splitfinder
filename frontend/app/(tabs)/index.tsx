@@ -1,3 +1,6 @@
+import { supabase } from "../../src/lib/supabase"
+import { useEffect } from "react"
+  
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 
