@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
+
 import React, { useCallback, useMemo, useState } from "react";
 import {
   Modal,
@@ -25,6 +28,20 @@ const PRICE_CAP_DEFAULT = 700000;
 const LAND_SIZE_MIN_DEFAULT = 600;
 
 export default function MapSearchScreen() {
+  
+  const [properties, setProperties] = useState<Property[]>([]);
+  useEffect(() => {
+  const fetchProperties = async () => {
+    const { data, error } = await supabase
+      .from("properties")
+      .select("*");
+
+    if (!error) setProperties(data || []);
+  };
+
+  fetchProperties();
+}, []);
+  
   const [suburb, setSuburb] = useState<string>(SUBURBS_ALL);
   const [priceCap, setPriceCap] = useState<number>(PRICE_CAP_DEFAULT);
   const [minLand, setMinLand] = useState<number>(LAND_SIZE_MIN_DEFAULT);
@@ -33,14 +50,14 @@ export default function MapSearchScreen() {
   const [landOpen, setLandOpen] = useState(false);
   const [selected, setSelected] = useState<Property | null>(null);
 
-  const filtered = useMemo<Property[]>(() => {
-    return PROPERTIES.filter(
-      (p) =>
-        (suburb === SUBURBS_ALL || p.suburb === suburb) &&
-        p.price <= priceCap &&
-        p.landSize >= minLand,
-    );
-  }, [suburb, priceCap, minLand]);
+ const filtered = useMemo(() => {
+  return properties.filter(
+    (p) =>
+      (suburb === SUBURBS_ALL || p.suburb === suburb) &&
+      p.price <= priceCap &&
+      p.landSize >= minLand,
+  );
+}, [properties, suburb, priceCap, minLand]);
 
   const suburbs = useMemo(() => getUniqueSuburbs(), []);
 
