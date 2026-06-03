@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "../../lib/supabase";
 
-import React, { useCallback, useMemo, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -16,11 +15,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
 import {
-  PROPERTIES,
-  Property,
   SUBURBS_ALL,
   getUniqueSuburbs,
 } from "@/src/data/properties";
+
 import PropertyDetailsModal from "@/src/components/PropertyDetailsModal";
 import LeafletMap from "@/src/components/LeafletMap";
 
@@ -29,7 +27,7 @@ const LAND_SIZE_MIN_DEFAULT = 600;
 
 export default function MapSearchScreen() {
   
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [properties, setProperties] = useState<any[]>([]);
   useEffect(() => {
   const fetchProperties = async () => {
     const { data, error } = await supabase
@@ -63,10 +61,10 @@ export default function MapSearchScreen() {
 
   const html = useMemo(() => buildLeafletHtml(filtered), [filtered]);
 
-  const handleMarker = useCallback((id: string) => {
-    const prop = PROPERTIES.find((p) => p.id === id) ?? null;
-    if (prop) setSelected(prop);
-  }, []);
+ const handleMarker = useCallback((id: string) => {
+  const prop = properties.find((p) => p.id === id) ?? null;
+  if (prop) setSelected(prop);
+}, [properties]);
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
