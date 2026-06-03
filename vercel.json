@@ -1,8 +1,8 @@
 {
-  "buildCommand": "npx expo export -p web",
-  "outputDirectory": "web-build",
-  "cleanUrls": true,
+  "buildCommand": "cd frontend && npm run web",
+  "outputDirectory": "frontend/dist",
   "framework": null,
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/:path*", "destination": "/" }
   ]
