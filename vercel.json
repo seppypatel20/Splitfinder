@@ -1,9 +1,0 @@
-{
-  "buildCommand": "cd frontend && npm run web",
-  "outputDirectory": "frontend/dist",
-  "framework": null,
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/:path*", "destination": "/" }
-  ]
-}
